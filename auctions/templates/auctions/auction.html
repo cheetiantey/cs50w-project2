@@ -1,0 +1,77 @@
+{%  extends "auctions/layout.html"  %}
+
+{%  block body  %}
+    <h2>{{  auction.title  }}</h2>
+    {%  if auction.photo  %}
+        <img src="{{  auction.photo  }}" width="30%" height="20%">
+    {%  endif  %}
+    <ul>
+        <li>Seller: {{  auction.seller  }}</li>
+        <li>Category: {{  auction.category  }}</li>
+        <li>Description: {{  auction.description  }}</li>
+        <li>Initial Price: ${{  auction.price  }}</li>
+        <li>Current Bid Price: ${{  highest_bid  }}</li>
+    </ul>
+
+    {%  for comment in comments  %}
+        <ul>
+            <li><b>{{  comment.user  }}</b> says : {{  comment.comment  }}</li>
+        </ul>
+    {%  endfor  %}
+
+    {%  if logged_in  %}
+        {%  comment  %}
+        <!-- <form action="{%  url 'watchlist'  %}" method="post"> 
+            {% csrf_token %}
+            <input name="{{  auction.id  }}" type="submit" value="Add to watchlist"></button>
+        </form> -->
+        
+        <a href="{%  url 'addWatchlist' auction.id  %}" name="watchlist">Add to watchlist</a>
+        {%  endcomment  %}
+        {%  if in_watchlist  %}
+            <form action="{% url 'removeWatchlist' auction.id %}" method="post">
+                {% csrf_token %}
+                
+                <br>
+                <input class="btn btn-danger" type="submit" value="Remove from watchlist">
+            </form>
+        {%  else  %}
+            <form action="{% url 'addWatchlist' auction.id %}" method="post">
+                {% csrf_token %}
+        
+                <br>
+                <input class="btn btn-success" type="submit" value="Add to watchlist">
+            </form>
+        {%  endif  %}
+        <br>
+        <form action="{% url 'bid' auction.id  %}" method="post">
+            {% csrf_token %}
+
+            {{  bidForm  }}
+            <br>
+            <input class="btn btn-primary" type="submit" value="Submit">
+        </form>
+        <br>
+
+        <br>
+        <form action="{% url 'comment' auction.id  %}" method="post">
+            {% csrf_token %}
+    
+            {{  commentForm  }}
+            <br>
+            <input class="btn btn-primary" type="submit" value="Submit">
+        </form>
+
+        {%  if owner  %}
+            <br>
+            <form action="{% url 'close' auction.id  %}" method="post">
+                {% csrf_token %}
+        
+                <br>
+                <input class="btn btn-warning" type="submit" value="Close this listing">
+            </form>
+        {%  endif  %}
+
+    {%  endif  %}
+
+{%  endblock  %}

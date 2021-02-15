@@ -1,0 +1,9 @@
+{%  extends "auctions/layout.html"  %}
+
+{%  block body  %}
+    <h2>Bid Error</h2>
+        <h3>
+            Your bid price for <a href="{%  url 'auction' auction.id %}">{{  auction.title  }}</a> should be higher than the current bid price!
+        </h3>
+
+{%  endblock  %}
